@@ -7,3 +7,5 @@
 @media print{.header,.footer,.back,.reportActions,.reportHistory button{display:none!important}.app{max-width:none;background:white;color:#263d34}.page{padding:0;max-width:none;min-height:0}.pageTitle{font-size:30px}.reportStats,.reportLayout,.recommendations,.reportHistory>div{break-inside:avoid}.reportLayout{display:grid;grid-template-columns:1fr 1fr;gap:25px}.radarPanel{background:#f0f2e9!important;print-color-adjust:exact}.reportStats{grid-template-columns:repeat(4,1fr)}.reportHistory{break-before:auto}.page p{font-size:10px}.reportHistory>div{padding:14px 0}.skillPanel u{print-color-adjust:exact}.legalStatus{print-color-adjust:exact}body{min-width:0}.pageTitle{margin-bottom:12px}}
 
 .messageLink{background:none;border:0;border-bottom:1px solid #9eaf87;padding:3px 0;margin:3px 0 8px;font-size:10px;color:#71875d;text-align:left}
+
+.callControlLabel{font-size:9px;color:#6b7c60;min-width:70px;text-align:center}

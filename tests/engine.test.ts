@@ -27,3 +27,23 @@ describe('Сохранения и независимые кампании',()=>{
  it('финал закрыт до семи глав в истории, но доступен преподавателю',()=>{useGame.getState().launch(8);expect(useGame.getState().campaigns.story.episode).toBeNull();useGame.getState().startMode('teacher');useGame.getState().launch(8);expect(useGame.getState().campaigns.teacher.episode?.id).toBe(8)});
  it('не начисляет повторно правовые баллы',()=>{useGame.getState().launch(1);useGame.getState().decide('safe');useGame.getState().qualify(1);const first=useGame.getState().campaigns.story.results[0];useGame.getState().qualify(0);expect(useGame.getState().campaigns.story.results[0]).toEqual(first)});
 });
+
+describe('Восстановление повреждённых данных',()=>{
+ it('отбрасывает неизвестные результаты и сохраняет работающие действия',async()=>{
+  const {restoreSave}=await import('../src/persistence');const current=useGame.getState();
+  const restored=restoreSave({screen:'report',go:'invalid',campaigns:{story:{started:true,results:[{id:99}],episode:null}}},current);
+  expect(restored.go).toBe(current.go);expect(restored.campaigns.story).toEqual(current.campaigns.story);
+ });
+ it('восстанавливает валидную попытку без смешивания кампаний',async()=>{
+  const {restoreSave}=await import('../src/persistence');const current=useGame.getState();
+  const episode=begin(scenarios[1]);const story={started:true,results:[],episode};
+  const restored=restoreSave({screen:'episode',mode:'story',volume:5,campaigns:{story}},current);
+  expect(restored.campaigns.story).toEqual(story);expect(restored.campaigns.teacher).toBe(current.campaigns.teacher);expect(restored.volume).toBe(1);
+ });
+ it('не открывает несуществующий эпизод',async()=>{
+  const {restoreSave}=await import('../src/persistence');const current=useGame.getState();
+  const base={...current,campaigns:{...current.campaigns,story:{started:false,results:[],episode:null}}};
+  const restored=restoreSave({screen:'episode',campaigns:{story:{started:true,results:[],episode:{id:999}}}},base);
+  expect(restored.screen).toBe('menu');
+ });
+});
